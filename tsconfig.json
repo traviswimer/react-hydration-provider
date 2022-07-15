@@ -1,0 +1,11 @@
+{
+	"extends": "@tsconfig/node14/tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./dist/THIS_IS_UNUSED/USE_tsup.config.ts_INSTEAD",
+		"esModuleInterop": true,
+		"declaration": true,
+		"sourceMap": true
+	},
+	"include": ["./src/**/*.ts"],
+	"exclude": ["./dist", "node_modules", "./src/**/*.test.ts"]
+}
