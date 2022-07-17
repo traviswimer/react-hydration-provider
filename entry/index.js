@@ -1,2 +1,2 @@
-import dirToJson from "../dist/index.js";
-export default dirToJson;
+import ReactHydrationUtils from "../dist/index.js";
+export default ReactHydrationUtils;
