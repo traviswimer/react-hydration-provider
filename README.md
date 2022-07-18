@@ -34,7 +34,9 @@ npm install react-hydration-utils --save
 #### Travis Wimer
 
 - <a href="https://traviswimer.com/developer-portfolio" title="React Native, React, NodeJS, UI/UX Developer" target="_blank">Developer Portfolio</a>
-- <a href="https://traviswimer.com/blog" title="React Native, React, NodeJS, UI/UX Blog" target="_blank">My Blog</a>
+- <a href="https://traviswimer.com/blog" title="React Native, React, NodeJS, UI/UX Blog" target="_blank">Blog</a>
+- <a href="https://www.linkedin.com/in/traviswimer/" title="Developer Resume" target="_blank">LinkedIn</a>
+- <a href="https://twitter.com/Travis_Wimer" title="Travis Wimer | Software Developer" target="_blank">Twitter</a>
 - <a href="https://traviswimer.com/developer-portfolio/react-hydration-utils" title="react-hydration-utils | Travis Wimer" target="_blank">React-Hydration-Utils Portfolio Page</a>
 
 ## License

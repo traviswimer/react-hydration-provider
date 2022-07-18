@@ -12,27 +12,13 @@ import * as ReactDOMServer from "react-dom/server";
 import * as ReactDOMClient from "react-dom/client";
 import waitForExpect from "wait-for-expect";
 
+import { addElementToPage } from "../utils/test_utils";
 import { ClientAndServer } from "./ClientAndServer";
 
 const TestClientComponent = <div>Client</div>;
 const TestServerComponent = <div>Server</div>;
 
-// Adds a ReactElement to the DOM (jsdom)
-function addElementToPage(element: React.ReactElement) {
-	const html = ReactDOMServer.renderToString(element);
-
-	const body_element: any = document.querySelector("body");
-	body_element.innerHTML = `<main>${html}</main>`;
-	const parent_element = document.querySelector("main");
-	if (!parent_element) {
-		throw new Error("<main /> element not found");
-	}
-
-	return parent_element;
-}
-
 const realConsoleDotError = console.error;
-
 beforeEach(() => {
 	console.error = jest.fn();
 });
@@ -147,6 +133,36 @@ test(`Renders empty if no client or server component is provided`, async () => {
 
 	await waitForExpect(() => {
 		expect(parent_element.innerHTML).toEqual("");
+	});
+
+	expect(console.error).not.toHaveBeenCalled();
+});
+
+test(`Renders array of ReactElements on both client and server (For cases such as passing along the "children" prop)`, async () => {
+	let TestServerArray = [
+		TestServerComponent,
+		TestServerComponent,
+		TestServerComponent,
+	];
+	let TestClientArray = [
+		TestClientComponent,
+		TestClientComponent,
+		TestClientComponent,
+	];
+	let jsx_element = (
+		<ClientAndServer Server={TestServerArray} Client={TestClientArray} />
+	);
+	const parent_element = addElementToPage(jsx_element);
+	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+
+	expect(parent_element.innerHTML).toEqual(
+		ReactDOMServer.renderToString(<>{TestServerArray}</>)
+	);
+
+	await waitForExpect(() => {
+		expect(parent_element.innerHTML).toEqual(
+			ReactDOMServer.renderToString(<>{TestClientArray}</>)
+		);
 	});
 
 	expect(console.error).not.toHaveBeenCalled();
