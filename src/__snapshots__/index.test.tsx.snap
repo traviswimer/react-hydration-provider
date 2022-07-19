@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders normal content on both Client and Server 1`] = `"<div><h1>Universal Title</h1><article><h2>Universal Subtitle</h2><div>Server</div></article></div>"`;
+
+exports[`Renders normal content on both Client and Server 2`] = `"<div><h1>Universal Title</h1><article><h2>Universal Subtitle</h2><div>Client</div></article></div>"`;
