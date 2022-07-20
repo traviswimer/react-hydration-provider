@@ -2,10 +2,10 @@ import React from "react";
 
 export function useComponentHydrated() {
 	// Once useEffect() has been called, we know the app has been hydrated.
-	const [hydration_completed, setHydrationCompleted] = React.useState(false);
+	const [hydrated, setHydrated] = React.useState(false);
 	React.useEffect(() => {
-		setHydrationCompleted(true);
+		setHydrated(true);
 	}, []);
 
-	return hydration_completed;
+	return hydrated;
 }

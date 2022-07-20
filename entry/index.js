@@ -1,2 +1,2 @@
-import * as ReactHydrationUtils from "../dist/index.js";
-export default ReactHydrationUtils;
+import * as ReactHydrationProvider from "../dist/index.js";
+export default ReactHydrationProvider;
