@@ -1,4 +1,6 @@
-# react-hydration-provider
+<p align="center">
+  <img alt="react-hydration-provider" src="./react-hydration-provider-logo.png" width="400">
+</p>
 
 > `react-hydration-provider` makes it easy to control what your app renders before and after app hydration.
 >
