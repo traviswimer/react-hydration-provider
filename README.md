@@ -1,10 +1,12 @@
 # react-hydration-provider
 
 > `react-hydration-provider` makes it easy to control what your app renders before and after app hydration.
+>
+> This makes it simple to avoid hydration errors and other problems related to Server-side Rendering (SSR), Static Site Generation (SSG), Deferred Static Generation (DSG), etc.
 
-[Learn about the problems this solves.](#problem-explanation)
-[Examples](#examples)
-[The API](#api)
+- [Learn about the problems this solves.](#problem-explanation)
+- [View Examples](#examples)
+- [Read the API reference](#api)
 
 ## Getting Started
 
@@ -22,6 +24,36 @@ yarn add react-hydration-provider
 npm install react-hydration-provider
 ```
 
+### importing the package
+
+**ES import**
+
+```javascript
+import {
+	HydrationContext,
+	HydrationProvider,
+	useHydrated,
+	Server,
+	Client,
+	createHydration,
+	useComponentHydrated,
+} from "react-hydration-provider";
+```
+
+**CommonJS require()**
+
+```javascript
+const {
+	HydrationContext,
+	HydrationProvider,
+	useHydrated,
+	Server,
+	Client,
+	createHydration,
+	useComponentHydrated,
+} = require("react-hydration-provider");
+```
+
 <h3 id="examples">Usage examples</h3>
 
 **Basic Example**
@@ -31,17 +63,17 @@ import { HydrationProvider, Server, Client } from "react-hydration-provider";
 
 function App() {
 	return (
-        // HydrationProvider should usually be placed at a high level in your app.
+		// HydrationProvider should usually be placed at a high level in your app.
 		<HydrationProvider>
 			<main>
 				<Server>
 					<p>
-						This will be rendered during pre-rendering html generation (SSR, SSG, etc) and the initial app hydration. It should always have a reliable value that will render the same in both a server and client environment.
+						This will be rendered during html generation (SSR, SSG, etc) and the initial app hydration. It should always have a reliable value that will render the same in both a server and client environment.
 					</p>
 				</Server>
 				<Client>
 					<p>This will be rendered after initial app hydration.</p>
-                    <p>It can safely contain dynamic content, like this: {Math.random()}
+					<p>It can safely contain dynamic content, like this: {Math.random()}
 				</Client>
 				<p>This will always be rendered.</p>
 			</main>
@@ -62,7 +94,7 @@ function App() {
 				<Client>
 					<p>
 						Nothing will be rendered to the user until the React app has
-						initialized.
+						initialized and hydrated.
 					</p>
 				</Client>
 			</main>
@@ -100,7 +132,7 @@ function App() {
 
 Usually you will want to use `<HydrationProvider` along with `useHydrated()` or the `<Server>` and `<Client>` components. Using the provider allows the hydration check to only be performed once for your entire app.
 
-[Read more about why you should use `useHydrated()` instead.](#hydration-rerenders-explanation).
+[Read more about why you should use `useHydrated()` instead.](#hydration-rerenders-explanation)
 
 ```javascript
 import { useComponentHydrated } from "react-hydration-provider";
@@ -121,7 +153,7 @@ function App() {
 
 <h2 id="api">API Reference</h2>
 
-### <HydrationProvider>
+### `<HydrationProvider>`
 
 A Context Provider that allows child components to determine if the app has been hydrated.
 
@@ -129,31 +161,31 @@ This should generally be used near the highest level of your app.
 
 _The only prop accepted is `children`_
 
-### <Server>
+### `<Server>`
 
 Component to wrap the content you want to render when HTML is generated on a server or your local machine (SSR, SSG, DSG, etc). This content will also be rendered during the first render of your app to ensure your app matches the HTML during hydration.
 
 **IMPORTANT: Ensure child components of `<Server>` are always predictable. It should always render the same. If not, you may still see hydration errors.**
 
-### <Client>
+### `<Client>`
 
 Component to wrap the content you want to render after your React app has hydrated. It should never be rendered on the server-side.
 
 Inside this component child components do not need to be reliable. It can render differently every time and there will be no hydration issues.
 
-### useHydrated()
+### `useHydrated()`
 
 **React hook function**
 
 Returns `true` if app is hydrated. Returns `false` if it has not yet been hydrated.
 
-### HydrationContext
+### `HydrationContext`
 
 The React `Context` used by `HydrationProvider`.
 
 You probably don't need to use this, but it is available in case there is an edge-case that requires it.
 
-### useComponentHydrated()
+### `useComponentHydrated()`
 
 **React hook function**
 
@@ -163,7 +195,7 @@ It works exactly the same as `useHydrated()`, except the component using it will
 
 This hook can be used completely independently. It does not require the use of a `HydrationProvider`.
 
-### createHydration()
+### `createHydration()`
 
 **Factory function to allow the use of multiple providers**
 
