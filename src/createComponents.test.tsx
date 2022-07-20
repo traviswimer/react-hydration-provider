@@ -15,8 +15,9 @@ import createComponents from "./createComponents";
 const TestClientComponent = <div>Client</div>;
 const TestServerComponent = <div>Server</div>;
 
-test(`Renders server component when hydration status is false`, async () => {
-	const { Server, Client } = createComponents(() => false);
+test(`Renders only <Server> when not hydrated`, async () => {
+	const hydrated = false;
+	const { Server, Client } = createComponents(() => hydrated);
 
 	let jsx_element = (
 		<>
@@ -29,8 +30,9 @@ test(`Renders server component when hydration status is false`, async () => {
 		ReactDOMServer.renderToString(TestServerComponent)
 	);
 });
-test(`Renders client component when hydration status is true`, async () => {
-	const { Server, Client } = createComponents(() => true);
+test(`Renders only <Client> component when hydrated`, async () => {
+	const hydrated = true;
+	const { Server, Client } = createComponents(() => hydrated);
 
 	let jsx_element = (
 		<>

@@ -14,11 +14,11 @@ import waitForExpect from "wait-for-expect";
 
 import { addElementToPage } from "../utils/test_utils";
 import {
-	HydrationStatusProvider,
-	useHydrationStatus,
+	HydrationProvider,
+	useHydrated,
 	Server,
 	Client,
-	useHydrationCompleted,
+	useComponentHydrated,
 } from "./index";
 
 const TestClientComponent = <div>Client</div>;
@@ -68,12 +68,12 @@ test(`Errors if there is a hydration mismatch`, async () => {
 	expect(jest.mocked(console.error).mock.calls[4]).toBeUndefined();
 });
 
-test(`Renders client and server component together`, async () => {
+test(`Renders <Server>, followed by <Client> after hydration`, async () => {
 	let jsx_element = (
-		<HydrationStatusProvider>
+		<HydrationProvider>
 			<Client>{TestClientComponent}</Client>
 			<Server>{TestServerComponent}</Server>
-		</HydrationStatusProvider>
+		</HydrationProvider>
 	);
 	const parent_element = addElementToPage(jsx_element);
 	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
@@ -91,11 +91,11 @@ test(`Renders client and server component together`, async () => {
 	expect(console.error).not.toHaveBeenCalled();
 });
 
-test(`Renders client when no server is provided`, async () => {
+test(`Renders <Client> after hydration when no <Server> is provided`, async () => {
 	let jsx_element = (
-		<HydrationStatusProvider>
+		<HydrationProvider>
 			<Client>{TestClientComponent}</Client>
-		</HydrationStatusProvider>
+		</HydrationProvider>
 	);
 
 	const parent_element = addElementToPage(jsx_element);
@@ -113,11 +113,11 @@ test(`Renders client when no server is provided`, async () => {
 	expect(console.error).not.toHaveBeenCalled();
 });
 
-test(`Renders server when no client is provided`, async () => {
+test(`Renders <Server> before hydration when no <Client> is provided`, async () => {
 	let jsx_element = (
-		<HydrationStatusProvider>
+		<HydrationProvider>
 			<Server>{TestServerComponent}</Server>
-		</HydrationStatusProvider>
+		</HydrationProvider>
 	);
 
 	const parent_element = addElementToPage(jsx_element);
@@ -134,8 +134,8 @@ test(`Renders server when no client is provided`, async () => {
 	expect(console.error).not.toHaveBeenCalled();
 });
 
-test(`Renders empty if no client or server is provided`, async () => {
-	let jsx_element = <HydrationStatusProvider></HydrationStatusProvider>;
+test(`Renders empty before and after hydration if no <Client> or <Server> is provided`, async () => {
+	let jsx_element = <HydrationProvider></HydrationProvider>;
 
 	const parent_element = addElementToPage(jsx_element);
 	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
@@ -149,9 +149,9 @@ test(`Renders empty if no client or server is provided`, async () => {
 	expect(console.error).not.toHaveBeenCalled();
 });
 
-test(`Renders normal content on both Client and Server`, async () => {
+test(`Renders normal HTML/components when inside <HydrationProvider>`, async () => {
 	let jsx_element = (
-		<HydrationStatusProvider>
+		<HydrationProvider>
 			<div>
 				<h1>Universal Title</h1>
 				<article>
@@ -160,7 +160,7 @@ test(`Renders normal content on both Client and Server`, async () => {
 					<Server>{TestServerComponent}</Server>
 				</article>
 			</div>
-		</HydrationStatusProvider>
+		</HydrationProvider>
 	);
 
 	const parent_element = addElementToPage(jsx_element);
@@ -183,7 +183,7 @@ test(`Renders normal content on both Client and Server`, async () => {
 	expect(console.error).not.toHaveBeenCalled();
 });
 
-test(`Renders array of ReactElements on both client and server (For cases such as passing along the "children" prop)`, async () => {
+test(`Renders array of ReactElements on both <Client> and <Server> (For cases such as passing along the "children" prop)`, async () => {
 	let TestServerArray = [
 		TestServerComponent,
 		TestServerComponent,
@@ -196,10 +196,10 @@ test(`Renders array of ReactElements on both client and server (For cases such a
 	];
 
 	let jsx_element = (
-		<HydrationStatusProvider>
+		<HydrationProvider>
 			<Client>{TestClientArray}</Client>
 			<Server>{TestServerArray}</Server>
-		</HydrationStatusProvider>
+		</HydrationProvider>
 	);
 	const parent_element = addElementToPage(jsx_element);
 	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
@@ -217,20 +217,47 @@ test(`Renders array of ReactElements on both client and server (For cases such a
 	expect(console.error).not.toHaveBeenCalled();
 });
 
-test(`useHydrationCompleted can manually test for hydration`, async () => {
+test(`useHydrated() correctly returns whether the app is hydrated`, async () => {
 	const hydrated_element = <div>hydrated</div>;
 	const unhydrated_element = <div>unhydrated</div>;
 	function TestComponent() {
-		const isHydrated = useHydrationCompleted();
+		const isHydrated = useHydrated();
 
 		return isHydrated ? hydrated_element : unhydrated_element;
 	}
 
 	let jsx_element = (
-		<HydrationStatusProvider>
+		<HydrationProvider>
 			<TestComponent />
-		</HydrationStatusProvider>
+		</HydrationProvider>
 	);
+
+	const parent_element = addElementToPage(jsx_element);
+	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+
+	expect(parent_element.innerHTML).toEqual(
+		ReactDOMServer.renderToString(unhydrated_element)
+	);
+
+	await waitForExpect(() => {
+		expect(parent_element.innerHTML).toEqual(
+			ReactDOMServer.renderToString(hydrated_element)
+		);
+	});
+
+	expect(console.error).not.toHaveBeenCalled();
+});
+
+test(`useComponentHydrated() correctly returns whether the app is hydrated without <HydrationProvider>`, async () => {
+	const hydrated_element = <div>hydrated</div>;
+	const unhydrated_element = <div>unhydrated</div>;
+	function TestComponent() {
+		const isHydrated = useComponentHydrated();
+
+		return isHydrated ? hydrated_element : unhydrated_element;
+	}
+
+	let jsx_element = <TestComponent />;
 
 	const parent_element = addElementToPage(jsx_element);
 	ReactDOMClient.hydrateRoot(parent_element, jsx_element);

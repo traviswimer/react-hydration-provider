@@ -1,14 +1,14 @@
-import createHydrationStatus, {
-	useHydrationCompleted,
-} from "./createHydrationStatus";
+import createHydration, { useComponentHydrated } from "./createHydration";
 
-const { HydrationStatusProvider, useHydrationStatus, Server, Client } =
-	createHydrationStatus();
+const { HydrationContext, HydrationProvider, useHydrated, Server, Client } =
+	createHydration();
 
 export {
-	HydrationStatusProvider,
-	useHydrationStatus,
+	HydrationContext,
+	HydrationProvider,
+	useHydrated,
 	Server,
 	Client,
-	useHydrationCompleted,
+	createHydration,
+	useComponentHydrated,
 };

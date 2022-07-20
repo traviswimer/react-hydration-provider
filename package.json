@@ -1,10 +1,18 @@
 {
-	"name": "react-hydration-utils",
+	"name": "react-hydration-provider",
 	"version": "1.0.0",
 	"license": "MIT",
 	"type": "module",
-	"description": "Tools to deal with the messiness of React client-side hydration.",
-	"keywords": [],
+	"description": "Provider for easily fixing React hydration errors.",
+	"keywords": [
+		"hydration",
+		"hydrated",
+		"SSR",
+		"SSG",
+		"DSG",
+		"server-side rendering",
+		"rendering"
+	],
 	"dependencies": {},
 	"devDependencies": {
 		"@tsconfig/node14": "^1.0.3",

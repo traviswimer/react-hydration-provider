@@ -1,14 +1,25 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 
-export default function createComponents(useHydrationStatus: Function) {
-	function Server({ children }: PropsWithChildren) {
-		const hydration_status = useHydrationStatus();
-		return !hydration_status ? <>{children}</> : null;
-	}
-	function Client({ children }: PropsWithChildren) {
-		const hydration_status = useHydrationStatus();
-		return hydration_status ? <>{children}</> : null;
-	}
+export type HydrationComponentFunction = (
+	props: React.PropsWithChildren
+) => JSX.Element | null;
+
+export interface HydrationComponents {
+	Server: HydrationComponentFunction;
+	Client: HydrationComponentFunction;
+}
+
+export default function createComponents(
+	useHydrated: Function
+): HydrationComponents {
+	const Server: HydrationComponentFunction = ({ children }) => {
+		const hydrated = useHydrated();
+		return !hydrated ? <>{children}</> : null;
+	};
+	const Client: HydrationComponentFunction = ({ children }) => {
+		const hydrated = useHydrated();
+		return hydrated ? <>{children}</> : null;
+	};
 
 	return {
 		Server,
