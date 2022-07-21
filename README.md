@@ -71,12 +71,16 @@ function App() {
 			<main>
 				<Server>
 					<p>
-						This will be rendered during html generation (SSR, SSG, etc) and the initial app hydration. It should always have a reliable value that will render the same in both a server and client environment.
+						This will be rendered during html generation (SSR, SSG, etc) and the
+						initial app hydration. It should always have a reliable value that
+						will render the same in both a server and client environment.
 					</p>
 				</Server>
 				<Client>
 					<p>This will be rendered after initial app hydration.</p>
-					<p>It can safely contain dynamic content, like this: {Math.random()}
+					<p>
+						It can safely contain dynamic content, like this: {Math.random()}
+					</p>
 				</Client>
 				<p>This will always be rendered.</p>
 			</main>
