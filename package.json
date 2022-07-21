@@ -3,10 +3,11 @@
 	"version": "1.0.0",
 	"license": "MIT",
 	"type": "module",
-	"description": "Provider for easily fixing React hydration errors.",
+	"description": "React tools for controlling what your app renders before and after app hydration.",
 	"keywords": [
 		"hydration",
 		"hydrated",
+		"hydration errors",
 		"SSR",
 		"SSG",
 		"DSG",
