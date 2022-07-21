@@ -9,6 +9,7 @@
 - [Learn about the problems this solves.](#problem-explanation)
 - [View Examples](#examples)
 - [Read the API reference](#api)
+- <a href="https://traviswimer.com/blog/easily-fix-react-hydration-errors" target="_blank" title="Easily Fix React Hydration Errors">Blog post about React hydration issues</a>
 
 ## Getting Started
 
