@@ -1,6 +1,6 @@
 {
 	"name": "react-hydration-provider",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"license": "MIT",
 	"type": "module",
 	"description": "React tools for controlling what your app renders before and after app hydration.",
