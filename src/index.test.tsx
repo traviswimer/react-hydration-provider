@@ -2,15 +2,17 @@
  * @jest-environment jsdom
  */
 
+import { jest } from "@jest/globals";
+
 // "react-dom/server" throws an error if `TextEncoder` isn't global.
 // This is a workaround for running the tests in jsdom environment.
 import { TextEncoder } from "util";
 global.TextEncoder = TextEncoder;
 
 import React from "react";
-import * as ReactDOMServer from "react-dom/server";
-import * as ReactDOMClient from "react-dom/client";
-import waitForExpect from "wait-for-expect";
+import { renderToString } from "react-dom/server";
+import { hydrateRoot } from "react-dom/client";
+const waitForExpect = require("wait-for-expect");
 
 import { addElementToPage } from "../utils/test_utils";
 import {
@@ -42,13 +44,11 @@ test(`Errors if there is a hydration mismatch`, async () => {
 	const mismatched_client = <div>This does not match the server</div>;
 
 	const parent_element = addElementToPage(mismatched_server);
-	ReactDOMClient.hydrateRoot(parent_element, mismatched_client);
+	hydrateRoot(parent_element, mismatched_client);
 
 	// Wait for hydration to complete (and fail)
 	await waitForExpect(() => {
-		expect(parent_element.innerHTML).toEqual(
-			ReactDOMServer.renderToString(mismatched_client)
-		);
+		expect(parent_element.innerHTML).toEqual(renderToString(mismatched_client));
 	});
 
 	expect(jest.mocked(console.error).mock.calls[0][0]).toEqual(
@@ -76,15 +76,13 @@ test(`Renders <Server>, followed by <Client> after hydration`, async () => {
 		</HydrationProvider>
 	);
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
-	expect(parent_element.innerHTML).toEqual(
-		ReactDOMServer.renderToString(TestServerComponent)
-	);
+	expect(parent_element.innerHTML).toEqual(renderToString(TestServerComponent));
 
 	await waitForExpect(() => {
 		expect(parent_element.innerHTML).toEqual(
-			ReactDOMServer.renderToString(TestClientComponent)
+			renderToString(TestClientComponent)
 		);
 	});
 
@@ -99,14 +97,14 @@ test(`Renders <Client> after hydration when no <Server> is provided`, async () =
 	);
 
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
 	// No server component
 	expect(parent_element.innerHTML).toEqual("");
 
 	await waitForExpect(() => {
 		expect(parent_element.innerHTML).toEqual(
-			ReactDOMServer.renderToString(TestClientComponent)
+			renderToString(TestClientComponent)
 		);
 	});
 
@@ -121,11 +119,9 @@ test(`Renders <Server> before hydration when no <Client> is provided`, async () 
 	);
 
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
-	expect(parent_element.innerHTML).toEqual(
-		ReactDOMServer.renderToString(TestServerComponent)
-	);
+	expect(parent_element.innerHTML).toEqual(renderToString(TestServerComponent));
 
 	await waitForExpect(() => {
 		expect(parent_element.innerHTML).toEqual("");
@@ -138,7 +134,7 @@ test(`Renders empty before and after hydration if no <Client> or <Server> is pro
 	let jsx_element = <HydrationProvider></HydrationProvider>;
 
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
 	expect(parent_element.innerHTML).toEqual("");
 
@@ -164,16 +160,14 @@ test(`Renders normal HTML/components when inside <HydrationProvider>`, async () 
 	);
 
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
 	// Snapshot of server render
 	expect(parent_element.innerHTML).toMatchSnapshot();
 
 	await waitForExpect(() => {
 		expect(parent_element.innerHTML).toEqual(
-			expect.stringContaining(
-				ReactDOMServer.renderToString(TestClientComponent)
-			)
+			expect.stringContaining(renderToString(TestClientComponent))
 		);
 	});
 
@@ -202,15 +196,15 @@ test(`Renders array of ReactElements on both <Client> and <Server> (For cases su
 		</HydrationProvider>
 	);
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
 	expect(parent_element.innerHTML).toEqual(
-		ReactDOMServer.renderToString(<>{TestServerArray}</>)
+		renderToString(<>{TestServerArray}</>)
 	);
 
 	await waitForExpect(() => {
 		expect(parent_element.innerHTML).toEqual(
-			ReactDOMServer.renderToString(<>{TestClientArray}</>)
+			renderToString(<>{TestClientArray}</>)
 		);
 	});
 
@@ -233,16 +227,12 @@ test(`useHydrated() correctly returns whether the app is hydrated`, async () => 
 	);
 
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
-	expect(parent_element.innerHTML).toEqual(
-		ReactDOMServer.renderToString(unhydrated_element)
-	);
+	expect(parent_element.innerHTML).toEqual(renderToString(unhydrated_element));
 
 	await waitForExpect(() => {
-		expect(parent_element.innerHTML).toEqual(
-			ReactDOMServer.renderToString(hydrated_element)
-		);
+		expect(parent_element.innerHTML).toEqual(renderToString(hydrated_element));
 	});
 
 	expect(console.error).not.toHaveBeenCalled();
@@ -260,16 +250,12 @@ test(`useComponentHydrated() correctly returns whether the app is hydrated witho
 	let jsx_element = <TestComponent />;
 
 	const parent_element = addElementToPage(jsx_element);
-	ReactDOMClient.hydrateRoot(parent_element, jsx_element);
+	hydrateRoot(parent_element, jsx_element);
 
-	expect(parent_element.innerHTML).toEqual(
-		ReactDOMServer.renderToString(unhydrated_element)
-	);
+	expect(parent_element.innerHTML).toEqual(renderToString(unhydrated_element));
 
 	await waitForExpect(() => {
-		expect(parent_element.innerHTML).toEqual(
-			ReactDOMServer.renderToString(hydrated_element)
-		);
+		expect(parent_element.innerHTML).toEqual(renderToString(hydrated_element));
 	});
 
 	expect(console.error).not.toHaveBeenCalled();

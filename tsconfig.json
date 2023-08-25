@@ -2,6 +2,7 @@
 	"extends": "@tsconfig/node14/tsconfig.json",
 	"compilerOptions": {
 		"outDir": "./dist/THIS_IS_UNUSED/USE_tsup.config.ts_INSTEAD",
+		"module": "NodeNext",
 		"esModuleInterop": true,
 		"declaration": true,
 		"sourceMap": true,

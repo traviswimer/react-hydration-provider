@@ -1,9 +1,9 @@
 import React from "react";
-import * as ReactDOMServer from "react-dom/server";
+import { renderToString } from "react-dom/server";
 
 // Adds a ReactElement to the DOM (jsdom)
-export function addElementToPage(element: React.ReactElement) {
-	const html = ReactDOMServer.renderToString(element);
+export function addElementToPage(element: React.ReactElement<any, string>) {
+	const html = renderToString(element);
 
 	const body_element: any = document.querySelector("body");
 	body_element.innerHTML = `<main>${html}</main>`;
