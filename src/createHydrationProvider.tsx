@@ -1,5 +1,5 @@
 import React from "react";
-import { useComponentHydrated } from "./useComponentHydrated";
+import { useComponentHydrated } from "./useComponentHydrated.js";
 
 export default function createHydrationProvider(
 	HydrationContext: React.Context<boolean>

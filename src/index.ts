@@ -1,4 +1,4 @@
-import createHydration, { useComponentHydrated } from "./createHydration";
+import createHydration, { useComponentHydrated } from "./createHydration.js";
 
 const { HydrationContext, HydrationProvider, useHydrated, Server, Client } =
 	createHydration();

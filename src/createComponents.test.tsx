@@ -2,13 +2,15 @@
  * @jest-environment jsdom
  */
 
+import { jest } from "@jest/globals";
+
 // "react-dom/server" throws an error if `TextEncoder` isn't global.
 // This is a workaround for running the tests in jsdom environment.
 import { TextEncoder } from "util";
 global.TextEncoder = TextEncoder;
 
 import React from "react";
-import * as ReactDOMServer from "react-dom/server";
+import { renderToString } from "react-dom/server";
 
 import createComponents from "./createComponents";
 
@@ -26,8 +28,8 @@ test(`Renders only <Server> when not hydrated`, async () => {
 		</>
 	);
 
-	expect(ReactDOMServer.renderToString(jsx_element)).toEqual(
-		ReactDOMServer.renderToString(TestServerComponent)
+	expect(renderToString(jsx_element)).toEqual(
+		renderToString(TestServerComponent)
 	);
 });
 test(`Renders only <Client> component when hydrated`, async () => {
@@ -41,7 +43,7 @@ test(`Renders only <Client> component when hydrated`, async () => {
 		</>
 	);
 
-	expect(ReactDOMServer.renderToString(jsx_element)).toEqual(
-		ReactDOMServer.renderToString(TestClientComponent)
+	expect(renderToString(jsx_element)).toEqual(
+		renderToString(TestClientComponent)
 	);
 });

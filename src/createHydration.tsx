@@ -1,8 +1,8 @@
 import React from "react";
-import createHydrationProvider from "./createHydrationProvider";
-import createComponents from "./createComponents";
-import type { HydrationComponents } from "./createComponents";
-export { useComponentHydrated } from "./useComponentHydrated";
+import createHydrationProvider from "./createHydrationProvider.js";
+import createComponents from "./createComponents.js";
+import type { HydrationComponents } from "./createComponents.js";
+export { useComponentHydrated } from "./useComponentHydrated.js";
 
 export default function createHydration() {
 	const HydrationContext: React.Context<boolean> = React.createContext(false);
