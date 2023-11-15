@@ -57,6 +57,14 @@ const {
 } = require("react-hydration-provider");
 ```
 
+### Usage with Server Components
+
+_Requires `react-hydration-provider` version 2.1.0 or later_
+
+If you are using [React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components), you should be able to use `HydrationProvider` and it's corresponding hooks/components without any changes.
+
+If you are using the standalone `useComponentHydrated` hook, you will need to include the [`"use client";`](https://react.dev/reference/react/use-client) directive in any component that uses it.
+
 <h3 id="examples">Usage examples</h3>
 
 **Basic Example**
